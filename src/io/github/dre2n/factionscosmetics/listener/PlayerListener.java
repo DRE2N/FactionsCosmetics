@@ -34,13 +34,17 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		
-		String title = Placeholders.replaceRelationPlaceholders(config.getTerritoryMessage(), factionStandpoint, factionTo);
-		String subtitle = Placeholders.replaceRelationPlaceholders(config.getTerritorySubMessage(), factionStandpoint, factionFrom);
+		String title = Placeholders.replaceFactionPlaceholders(config.getTerritoryMessage(), factionTo);
+		title = Placeholders.replaceRelationPlaceholders(title, factionStandpoint, factionTo);
+		String subtitle = Placeholders.replaceFactionPlaceholders(config.getTerritorySubMessage(), factionFrom);
+		subtitle = Placeholders.replaceRelationPlaceholders(subtitle, factionStandpoint, factionFrom);
 		
 		switch (config.getTerritoryMessageType()) {
 			case CHAT_CENTERED:
 				MessageUtil.sendCenteredMessage(player, title);
+				break;
 			case CHAT_CENTERED_AND_SUBMESSAGE:
+				MessageUtil.sendCenteredMessage(player, title);
 				MessageUtil.sendCenteredMessage(player, subtitle);
 				break;
 			case SUBTITLE:

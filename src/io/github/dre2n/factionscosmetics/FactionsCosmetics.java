@@ -8,6 +8,7 @@ import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.factionscosmetics.config.FCConfig;
+import io.github.dre2n.factionscosmetics.listener.FactionsListener;
 import io.github.dre2n.factionscosmetics.listener.PlayerListener;
 
 public class FactionsCosmetics extends BRPlugin {
@@ -36,6 +37,7 @@ public class FactionsCosmetics extends BRPlugin {
 		loadFCConfig(new File(getDataFolder(), "config.yml"));
 		
 		manager.registerEvents(new PlayerListener(), this);
+		manager.registerEvents(new FactionsListener(), this);
 	}
 	
 	/**
