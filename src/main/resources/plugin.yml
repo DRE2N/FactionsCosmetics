@@ -1,6 +1,6 @@
 name: FactionsCosmetics
 main: io.github.dre2n.factionscosmetics.FactionsCosmetics
-version: 0.0.2
+version: ${project.version}
 author: Daniel Saukel
-website: https://dre2n.github.io
-depend: [Factions]
+website: ${project.url}
+softdepend: [BlueRoseCommons, Factions]
