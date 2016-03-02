@@ -16,14 +16,17 @@
  */
 package io.github.dre2n.factionscosmetics;
 
+import com.massivecraft.factions.P;
 import com.massivecraft.factions.Patch;
 import io.github.dre2n.commons.compatibility.Internals;
 import io.github.dre2n.commons.javaplugin.BRPlugin;
 import io.github.dre2n.commons.javaplugin.BRPluginSettings;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
+import io.github.dre2n.factionscosmetics.command.ScoreboardCommand;
 import io.github.dre2n.factionscosmetics.config.FCConfig;
 import io.github.dre2n.factionscosmetics.listener.FactionsListener;
 import io.github.dre2n.factionscosmetics.listener.PlayerListener;
+import io.github.dre2n.factionscosmetics.player.FCPlayers;
 import java.io.File;
 
 /**
@@ -34,6 +37,7 @@ public class FactionsCosmetics extends BRPlugin {
     private static FactionsCosmetics instance;
 
     private FCConfig config;
+    private FCPlayers players;
 
     public FactionsCosmetics() {
         settings = new BRPluginSettings(false, false, false, false, Internals.INDEPENDENT);
@@ -55,20 +59,27 @@ public class FactionsCosmetics extends BRPlugin {
         instance = this;
 
         loadFCConfig(new File(getDataFolder(), "config.yml"));
+        loadFCPlayers();
 
         manager.registerEvents(new PlayerListener(), this);
         manager.registerEvents(new FactionsListener(), this);
+
+        if (config.isScoreboardEnabledByDefault()) {
+            P.p.cmdBase.subCommands.add(new ScoreboardCommand());
+        }
     }
 
     /**
-     * @return the plugin instance
+     * @return
+     * the plugin instance
      */
     public static FactionsCosmetics getInstance() {
         return instance;
     }
 
     /**
-     * @return the loaded instance of FCConfig
+     * @return
+     * the loaded instance of FCConfig
      */
     public FCConfig getFCConfig() {
         return config;
@@ -79,6 +90,21 @@ public class FactionsCosmetics extends BRPlugin {
      */
     public void loadFCConfig(File file) {
         config = new FCConfig(file);
+    }
+
+    /**
+     * @return
+     * the loaded instance of FCPlayers
+     */
+    public FCPlayers getFCPlayers() {
+        return players;
+    }
+
+    /**
+     * load / reload a new instance of FCPlayers
+     */
+    public void loadFCPlayers() {
+        players = new FCPlayers();
     }
 
 }

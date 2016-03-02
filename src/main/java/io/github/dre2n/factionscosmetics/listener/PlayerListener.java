@@ -22,19 +22,27 @@ import com.massivecraft.factions.Faction;
 import io.github.dre2n.commons.util.messageutil.MessageUtil;
 import io.github.dre2n.factionscosmetics.FactionsCosmetics;
 import io.github.dre2n.factionscosmetics.config.FCConfig;
+import io.github.dre2n.factionscosmetics.player.FCPlayer;
+import io.github.dre2n.factionscosmetics.player.FCPlayers;
+import io.github.dre2n.factionscosmetics.scoreboards.FScoreboard;
+import io.github.dre2n.factionscosmetics.scoreboards.sidebar.FDefaultSidebar;
 import io.github.dre2n.factionscosmetics.territorymessage.TerritoryMessageType;
 import io.github.dre2n.factionsone.api.Placeholders;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * @author Daniel Saukel
  */
 public class PlayerListener implements Listener {
 
-    protected static FCConfig config = FactionsCosmetics.getInstance().getFCConfig();
+    protected static FactionsCosmetics plugin = FactionsCosmetics.getInstance();
+    protected static FCPlayers fcPlayers = plugin.getFCPlayers();
+    protected static FCConfig config = plugin.getFCConfig();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
@@ -76,6 +84,24 @@ public class PlayerListener implements Listener {
             default:
                 break;
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        FCPlayer fcPlayer = new FCPlayer(event.getPlayer());
+
+        if (config.isScoreboardEnabledByDefault()) {
+            FScoreboard.init(fcPlayer.getFPlayer());
+            FScoreboard.get(fcPlayer.getFPlayer()).setDefaultSidebar(new FDefaultSidebar(), config.getScoreboardUpdateInterval());
+            FScoreboard.get(fcPlayer.getFPlayer()).setSidebarVisibility(fcPlayer.getShowScoreboard());
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        FCPlayer fcPlayer = fcPlayers.getFCPlayer(event.getPlayer());
+        FScoreboard.remove(fcPlayer.getFPlayer());
+        fcPlayer.remove();
     }
 
 }

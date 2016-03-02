@@ -21,13 +21,25 @@ import io.github.dre2n.commons.util.EnumUtil;
 import io.github.dre2n.factionscosmetics.territorymessage.TerritoryMessageType;
 import io.github.dre2n.factionsone.api.Placeholders;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Daniel Saukel
  */
 public class FCConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 1;
+    public static final int CONFIG_VERSION = 2;
+
+    private String nametagPrefix = "%relation_color%%faction_tag% %player_prefix%";
+
+    private double scoreboardExpiration = 7;
+    private double scoreboardUpdateInterval = 1;
+    private boolean defaultScoreboardPrefixes = true;
+    private boolean scoreboardEnabledByDefault = true;
+    private boolean scoreboardFactionlessEnabled = true;
+    private String defaultScoreboardTitle = "TEST";
+    private List<String> scoreboardFactionInfo = new ArrayList<>();
 
     private TerritoryMessageType territoryMessageType = TerritoryMessageType.TITLE_AND_SUBMESSAGE;
     private String territoryMessage = Placeholders.RELATION_COLOR.toString() + Placeholders.FACTION_TAG.toString();
@@ -46,42 +58,112 @@ public class FCConfig extends BRConfig {
     }
 
     /**
-     * @return the territory message type
+     * @return
+     * the nametag prefix
+     */
+    public String getNametagPrefix() {
+        return nametagPrefix;
+    }
+
+    /**
+     * @return
+     * the time in ticks the scoreboard stays
+     */
+    public int getScoreboardExpiration() {
+        return (int) (scoreboardExpiration * 20);
+    }
+
+    /**
+     * @return
+     * how often the scoreboard will be updated
+     */
+    public int getScoreboardUpdateInterval() {
+        return (int) (scoreboardUpdateInterval * 20);
+    }
+
+    /**
+     * @return
+     * the default scoreboard prefixes
+     */
+    public boolean getDefaultScoreboardPrefixes() {
+        return defaultScoreboardPrefixes;
+    }
+
+    /**
+     * @return
+     * if the scoreboard pops up when the player joins
+     */
+    public boolean isScoreboardEnabledByDefault() {
+        return scoreboardEnabledByDefault;
+    }
+
+    /**
+     * @return
+     * if the scoreboard pops up when the player joins
+     */
+    public boolean isScoreboardFactionlessEnabled() {
+        return scoreboardFactionlessEnabled;
+    }
+
+    /**
+     * @return
+     * the default scoreboard title
+     */
+    public String getDefaultScoreboardTitle() {
+        return defaultScoreboardTitle;
+    }
+
+    /**
+     * @return
+     * the information the scoreboard shows
+     */
+    public List<String> getScoreboardFactionInfo() {
+        return scoreboardFactionInfo;
+    }
+
+    /**
+     * @return
+     * the territory message type
      */
     public TerritoryMessageType getTerritoryMessageType() {
         return territoryMessageType;
     }
 
     /**
-     * @return the territory message
+     * @return
+     * the territory message
      */
     public String getTerritoryMessage() {
         return territoryMessage;
     }
 
     /**
-     * @return the second line of the territory message
+     * @return
+     * the second line of the territory message
      */
     public String getTerritorySubMessage() {
         return territorySubMessage;
     }
 
     /**
-     * @return the time in ticks it takes for the territory message to fade in
+     * @return
+     * the time in ticks it takes for the territory message to fade in
      */
     public int getTerritoryMessageFadeIn() {
         return (int) (territoryMessageFadeIn * 20);
     }
 
     /**
-     * @return the time in ticks the territory message stays
+     * @return
+     * the time in ticks the territory message stays
      */
     public int getTerritoryMessageShow() {
         return (int) (territoryMessageShow * 20);
     }
 
     /**
-     * @return the time in ticks it takes for the territory message to fade out
+     * @return
+     * the time in ticks it takes for the territory message to fade out
      */
     public int getTerritoryMessageFadeOut() {
         return (int) (territoryMessageFadeOut * 20);
@@ -89,6 +171,34 @@ public class FCConfig extends BRConfig {
 
     @Override
     public void initialize() {
+        if (!config.contains("scoreboard.expiration")) {
+            config.set("scoreboard.expiration", scoreboardExpiration);
+        }
+
+        if (!config.contains("scoreboard.updateInterval")) {
+            config.set("scoreboard.updateInterval", scoreboardUpdateInterval);
+        }
+
+        if (!config.contains("scoreboard.defaultPrefixes")) {
+            config.set("scoreboard.defaultPrefixes", defaultScoreboardPrefixes);
+        }
+
+        if (!config.contains("scoreboard.enabledByDefault")) {
+            config.set("scoreboard.enabledByDefault", scoreboardEnabledByDefault);
+        }
+
+        if (!config.contains("scoreboard.factionlessEnabled")) {
+            config.set("scoreboard.factionlessEnabled", scoreboardFactionlessEnabled);
+        }
+
+        if (!config.contains("scoreboard.defaultTitle")) {
+            config.set("scoreboard.defaultTitle", defaultScoreboardTitle);
+        }
+
+        if (!config.contains("scoreboard.factionInfo")) {
+            config.set("scoreboard.factionInfo", scoreboardFactionInfo);
+        }
+
         if (!config.contains("territoryMessage.type")) {
             config.set("territoryMessage.type", territoryMessageType.toString());
         }
@@ -118,6 +228,34 @@ public class FCConfig extends BRConfig {
 
     @Override
     public void load() {
+        if (config.contains("scoreboard.expiration")) {
+            scoreboardExpiration = config.getDouble("scoreboard.expiration");
+        }
+
+        if (config.contains("scoreboard.updateInterval")) {
+            scoreboardUpdateInterval = config.getDouble("scoreboard.updateInterval");
+        }
+
+        if (config.contains("scoreboard.defaultPrefixes")) {
+            defaultScoreboardPrefixes = config.getBoolean("scoreboard.defaultPrefixes");
+        }
+
+        if (config.contains("scoreboard.enabledByDefault")) {
+            scoreboardEnabledByDefault = config.getBoolean("scoreboard.enabledByDefault");
+        }
+
+        if (config.contains("scoreboard.factionlessEnabled")) {
+            scoreboardFactionlessEnabled = config.getBoolean("scoreboard.factionlessEnabled");
+        }
+
+        if (config.contains("scoreboard.defaultTitle")) {
+            defaultScoreboardTitle = config.getString("scoreboard.defaultTitle");
+        }
+
+        if (config.contains("scoreboard.factionInfo")) {
+            scoreboardFactionInfo = config.getStringList("scoreboard.factionInfo");
+        }
+
         if (config.contains("territoryMessage.type")) {
             if (EnumUtil.isValidEnum(TerritoryMessageType.class, config.getString("territoryMessage.type"))) {
                 territoryMessageType = TerritoryMessageType.valueOf(config.getString("territoryMessage.type"));

@@ -4,3 +4,7 @@ version: ${project.version}
 author: Daniel Saukel
 website: ${project.url}
 softdepend: [BlueRoseCommons, Factions]
+permissions:
+  factionscosmetics.scoreboard:
+    description: Allows to toggle the scoreboard.
+    default: true
