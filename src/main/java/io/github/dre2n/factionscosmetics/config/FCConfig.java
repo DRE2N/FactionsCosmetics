@@ -29,9 +29,9 @@ import java.util.List;
  */
 public class FCConfig extends BRConfig {
 
-    public static final int CONFIG_VERSION = 2;
+    public static final int CONFIG_VERSION = 3;
 
-    private String nametagPrefix = "%relation_color%%faction_tag% %player_prefix%";
+    private String nametagPrefix = "%relation_color%%faction_tag% ";
 
     private double scoreboardExpiration = 7;
     private double scoreboardUpdateInterval = 1;
@@ -171,6 +171,10 @@ public class FCConfig extends BRConfig {
 
     @Override
     public void initialize() {
+        if (!config.contains("nametag.prefix")) {
+            config.set("nametag.prefix", nametagPrefix);
+        }
+
         if (!config.contains("scoreboard.expiration")) {
             config.set("scoreboard.expiration", scoreboardExpiration);
         }
@@ -228,6 +232,10 @@ public class FCConfig extends BRConfig {
 
     @Override
     public void load() {
+        if (config.contains("nametag.prefix")) {
+            nametagPrefix = config.getString("nametag.prefix");
+        }
+
         if (config.contains("scoreboard.expiration")) {
             scoreboardExpiration = config.getDouble("scoreboard.expiration");
         }
