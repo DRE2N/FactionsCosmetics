@@ -200,6 +200,11 @@ public class FTeamWrapper {
             String prefix = plugin.getFCConfig().getNametagPrefix();
             prefix = Placeholders.replaceRelationPlaceholders(prefix, faction, fplayer);
             prefix = Placeholders.replaceFactionPlaceholders(prefix, faction);
+            // Avoid client bug
+            if (prefix.length() > 16) {
+                prefix = prefix.substring(0, 15);
+            }
+
             if (team.getPrefix() == null || !team.getPrefix().equals(prefix)) {
                 team.setPrefix(prefix);
             }
