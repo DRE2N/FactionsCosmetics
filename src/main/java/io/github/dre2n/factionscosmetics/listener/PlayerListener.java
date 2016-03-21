@@ -28,12 +28,14 @@ import io.github.dre2n.factionscosmetics.scoreboards.FScoreboard;
 import io.github.dre2n.factionscosmetics.scoreboards.sidebar.FDefaultSidebar;
 import io.github.dre2n.factionscosmetics.territorymessage.TerritoryMessageType;
 import io.github.dre2n.factionsone.api.Placeholders;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * @author Daniel Saukel
@@ -41,19 +43,27 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
 
     protected static FactionsCosmetics plugin = FactionsCosmetics.getInstance();
-    protected static FCPlayers fcPlayers = plugin.getFCPlayers();
+    protected static FCPlayers players = plugin.getFCPlayers();
     protected static FCConfig config = plugin.getFCConfig();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
+        sendTerritoryMessage(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        sendTerritoryMessage(event.getPlayer(), event.getFrom(), event.getTo());
+    }
+
+    public void sendTerritoryMessage(Player player, Location from, Location to) {
         if (config.getTerritoryMessageType() == TerritoryMessageType.DISABLED) {
             return;
         }
 
-        Player player = event.getPlayer();
         Faction factionStandpoint = FPlayers.i.get(player).getFaction();
-        Faction factionFrom = Board.getFactionAt(event.getFrom());
-        Faction factionTo = Board.getFactionAt(event.getTo());
+        Faction factionFrom = Board.getFactionAt(from);
+        Faction factionTo = Board.getFactionAt(to);
 
         if (factionFrom == factionTo) {
             return;
@@ -99,7 +109,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        FCPlayer fcPlayer = fcPlayers.getFCPlayer(event.getPlayer());
+        FCPlayer fcPlayer = players.getFCPlayer(event.getPlayer());
         FScoreboard.remove(fcPlayer.getFPlayer());
         fcPlayer.remove();
     }
