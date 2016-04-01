@@ -83,13 +83,13 @@ public class PlayerListener implements Listener {
                 MessageUtil.sendCenteredMessage(player, subtitle);
                 break;
             case SUBTITLE:
-                MessageUtil.sendScreenMessage(player, "", title, config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
+                MessageUtil.sendTitleMessage(player, "", title, config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
                 break;
             case TITLE:
-                MessageUtil.sendScreenMessage(player, title, "", config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
+                MessageUtil.sendTitleMessage(player, title, "", config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
                 break;
             case TITLE_AND_SUBMESSAGE:
-                MessageUtil.sendScreenMessage(player, title, subtitle, config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
+                MessageUtil.sendTitleMessage(player, title, subtitle, config.getTerritoryMessageFadeIn(), config.getTerritoryMessageShow(), config.getTerritoryMessageFadeOut());
                 break;
             default:
                 break;
