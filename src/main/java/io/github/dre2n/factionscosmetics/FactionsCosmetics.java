@@ -40,7 +40,20 @@ public class FactionsCosmetics extends BRPlugin {
     private FCPlayers players;
 
     public FactionsCosmetics() {
-        settings = new BRPluginSettings(false, false, false, false, Internals.INDEPENDENT);
+        /*
+         * ##########################
+         * ####~BRPluginSettings~####
+         * ##########################
+         * #~Internals~##~~v1_7_R3+~#
+         * #~SpigotAPI~##~~~false~~~#
+         * #~~~~UUID~~~##~~~~true~~~#
+         * #~~Economy~~##~~~~true~~~#
+         * #Permissions##~~~~true~~~#
+         * #~~Metrics~~##~~~~true~~~#
+         * ##########################
+         */
+
+        settings = new BRPluginSettings(false, false, false, false, true, Internals.INDEPENDENT);
     }
 
     @Override
